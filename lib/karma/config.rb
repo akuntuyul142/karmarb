@@ -1,18 +1,22 @@
 module Karma
-  Config = Struct.new(:host, :port) do
+  class << self
+    attr_accessor :configuration
+  end
+
+  class Configuration
+    attr_accessor :port, :host
+
     def initialize
-      self.port = 8080
-      self.host = 'localhost'
+      @host = 'localhost'
+      @port = 8080
     end
   end
 
   def self.configure
-    @config = Config.new
-    yield(@config) if block_given?
-    @config
+    yield(configuration)
   end
 
-  def self.config
-    @config || configure
+  def self.configuration
+    @@configuration ||= Configuration.new
   end
 end

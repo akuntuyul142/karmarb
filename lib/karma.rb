@@ -1,6 +1,5 @@
 require 'json'
 require 'socket'
-require 'ostruct'
 
 require 'karma/version'
 require 'karma/config'

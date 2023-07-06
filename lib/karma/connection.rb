@@ -1,8 +1,6 @@
 module Karma
   class Connection
     def initialize
-      @port   = Karma.config.port
-      @host   = Karma.config.host
       @maxlen = 4096
     end
 
@@ -49,7 +47,8 @@ module Karma
 
     def establish_connection!
       @socket = TCPSocket.new(
-        @host, @port,
+        Karma.configuration.host,
+        Karma.configuration.port,
         connect_timeout: 0.5
       )
     end

@@ -8,7 +8,7 @@ module Karma
       unless defined?(@socket)
         establish_connection!
       end
-      send(request)
+      push(request)
       read
     end
 
@@ -23,7 +23,7 @@ module Karma
       end
     end
 
-    def send(message)
+    def push(message)
       message = message.to_json
       connect do |conn|
         conn.send("#{message}\r\n", 0)
@@ -48,8 +48,7 @@ module Karma
     def establish_connection!
       @socket = TCPSocket.new(
         Karma.configuration.host,
-        Karma.configuration.port,
-        connect_timeout: 0.5
+        Karma.configuration.port
       )
     end
 

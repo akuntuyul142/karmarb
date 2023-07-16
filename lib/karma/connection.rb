@@ -1,7 +1,6 @@
 module Karma
   class Connection
     def initialize
-      @maxlen = 4096
     end
 
     def send_and_read(request)

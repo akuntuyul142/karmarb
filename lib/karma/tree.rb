@@ -1,8 +1,12 @@
+require 'connection_pool'
+
 module Karma
   class Tree
     def initialize
-      @connection = Connection.new
-      @tree_name  = nil
+      @connection = ConnectionPool.new(size: 5, timeout: 0.5) do
+        Connection.new
+      end
+      @tree_name = nil
     end
 
     def tree(name)
@@ -14,14 +18,20 @@ module Karma
       request = {
         command: 'ping'
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def trees
       request = {
         command: 'trees'
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def create(name)
@@ -29,7 +39,10 @@ module Karma
         command: 'create',
         tree_name: name
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def drop(name)
@@ -37,7 +50,10 @@ module Karma
         command: 'drop',
         tree_name: name
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def dump(name)
@@ -45,21 +61,30 @@ module Karma
         command: 'dump',
         tree_name: name
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def dump_all
       request = {
         command: 'dump_all'
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def dumps
       request = {
         command: 'dumps'
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def load(name)
@@ -67,7 +92,10 @@ module Karma
         command: 'load',
         tree_name: name
       }
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def increment(**args)
@@ -75,7 +103,10 @@ module Karma
         command: 'increment',
         tree_name: @tree_name
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def decrement(**args)
@@ -83,7 +114,10 @@ module Karma
         command: 'decrement',
         tree_name: @tree_name
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def sum(**args)
@@ -91,7 +125,10 @@ module Karma
         command: 'sum',
         tree_name: @tree_name
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def find(**args)
@@ -99,7 +136,10 @@ module Karma
         command: 'find',
         tree_name: @tree_name
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def reset(**args)
@@ -107,7 +147,10 @@ module Karma
         command: 'reset',
         tree_name: @tree_name,
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
 
     def delete(**args)
@@ -115,7 +158,10 @@ module Karma
         command: 'delete',
         tree_name: @tree_name,
       }.merge!(args)
-      @connection.send_and_read(request)
+
+      @connection.with do |conn|
+        conn.send_and_read(request)
+      end
     end
   end
 end

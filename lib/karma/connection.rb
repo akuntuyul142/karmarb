@@ -33,8 +33,8 @@ module Karma
 
     def read
       connect do |conn|
-        response = conn.recv(@maxlen)
         begin
+          response = conn.readline
           OpenStruct.new(JSON.parse(response))
         rescue => e
           return OpenStruct.new({
